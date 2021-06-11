@@ -9,6 +9,7 @@ import {
   Text,
   useTexture,
   useGLTF,
+  PerspectiveCamera
 } from "@react-three/drei";
 import {
   Physics,
@@ -19,6 +20,29 @@ import {
 import { useControls } from "./hooks/useControls";
 
 const vl = 10;
+
+function Rig({ children }) {
+ let mouse = new THREE.Vector2(-250, 50)
+  const outer = useRef()
+  const inner = useRef()
+  const main = useRef()
+  useFrame(({ camera, clock }) => {
+    if (outer.current && inner.current) {
+      outer.current.position.y = THREE.MathUtils.lerp(outer.current.position.y, 0, 0.05)
+      inner.current.rotation.y = Math.sin(clock.getElapsedTime() / 8) * Math.PI
+      inner.current.position.z = 5 + -Math.sin(clock.getElapsedTime() / 2) * 10
+      inner.current.position.y = -5 + Math.sin(clock.getElapsedTime() / 2) * 2
+
+
+ 
+    }
+  })
+  return (
+    <group position={[0, -100, 0]} ref={outer}>
+      <group ref={inner}>{children}</group>
+    </group>
+  )
+}
 
 function VideoText({ clicked, ...props }) {
   const [video] = useState(() =>
@@ -31,7 +55,7 @@ function VideoText({ clicked, ...props }) {
   useEffect(() => void (clicked && video.play()), [video, clicked]);
   return (
     <Text font="/Inter-Bold.woff" fontSize={3} letterSpacing={-0.06} {...props}>
-      drei
+       Hi! I'm Jose
       {/* <meshBasicMaterial toneMapped={false}>
         <videoTexture attach="map" args={[video]} encoding={THREE.sRGBEncoding} />
       </meshBasicMaterial> */}
@@ -53,30 +77,29 @@ function Box({
   const [ref, api] = useBox(() => ({ mass: 1 }));
   const controls = useControls();
 
-
   useFrame((state, delta) => {
     const { forward, backward, left, right, brake, reset } = controls.current;
     if (forward && left) {
       api.velocity.set(-vl, 0, vl);
-    state.camera.position.copy(ref.current.position);
+      state.camera.position.copy(ref.current.position);
     } else if (forward && right) {
       api.velocity.set(-vl, 0, -vl);
-    state.camera.position.copy(ref.current.position);
+      state.camera.position.copy(ref.current.position);
     } else if (backward && left) {
       api.velocity.set(vl, 0, vl);
-    state.camera.position.copy(ref.current.position);
+      state.camera.position.copy(ref.current.position);
     } else if (backward && right) {
       api.velocity.set(vl, 0, -vl);
-    state.camera.position.copy(ref.current.position);
+      state.camera.position.copy(ref.current.position);
     } else if (forward) {
       api.velocity.set(-vl, 0, 0);
-    state.camera.position.copy(ref.current.position);
+      state.camera.position.copy(ref.current.position);
     } else if (backward) {
       api.velocity.set(vl, 0, 0);
-    state.camera.position.copy(ref.current.position);
+      state.camera.position.copy(ref.current.position);
     } else if (left) {
       api.velocity.set(0, 0, vl);
-    state.camera.position.copy(ref.current.position);
+      state.camera.position.copy(ref.current.position);
     } else if (right) {
       api.velocity.set(0, 0, -vl);
       state.camera.position.copy(ref.current.position);
@@ -148,7 +171,7 @@ export default function App() {
       </h1>
       <Canvas
         linear
-        mode="concurrent"
+        shadows
         dpr={[1, 1.5]}
         gl={{ antialias: false }}
         camera={{ position: [30, 20, 20], near: 0.01, far: 10000 }}
@@ -159,21 +182,37 @@ export default function App() {
           // gl.setClearColor(new THREE.Color("#020209"));
         }}
       >
+          <Rig>
+        <PerspectiveCamera makeDefault position={[0, 0, 16]} fov={75}>
+          <pointLight intensity={1} position={[-10, -25, -10]} />
+          <spotLight
+            castShadow
+            intensity={2.25}
+            angle={0.2}
+            penumbra={1}
+            position={[-25, 20, -15]}
+            shadow-mapSize={[1024, 1024]}
+            shadow-bias={-0.0001}
+          />
+        </PerspectiveCamera>
+          </Rig>
         <OrbitControls />
         <Stars />
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 15, 10]} angle={0.3} />
         {/* <Jumbo/> */}
+        <Suspense fallback={null}>
         <Physics>
+          {/* <Box /> */}
           <VideoText position={[0, 1.3, -2]} />
-          <Box />
-          <Plane
+          {/* <Plane
             color="lightblue"
             rotation-x={-Math.PI / 2}
             position={[0, 0, 0]}
             scale={[400, 400, 0.2]}
-          />
+          /> */}
         </Physics>
+        </Suspense>
       </Canvas>
     </div>
   );
