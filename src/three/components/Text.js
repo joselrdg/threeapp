@@ -3,7 +3,7 @@ import React, { useMemo, useRef, useLayoutEffect } from 'react'
 import { useLoader } from '@react-three/fiber'
 import Roboto from '../../Roboto_Bold.json'
 
-export default function Textito({ children, vAlign = 'center', hAlign = 'center', size = 1.5, color = '#000000', ...props }) {
+export default function Textito({ children, vAlign = 'center', hAlign = 'center', size = 1.5, color = '##ca2b07', ...props }) {
     const font = new THREE.FontLoader().parse(Roboto);
     const config = useMemo(
         () => ({ font, size: 40, height: 30, curveSegments: 32, bevelEnabled: true, bevelThickness: 6, bevelSize: 2.5, bevelOffset: 0, bevelSegments: 8 }),

@@ -20,18 +20,19 @@ import {
 import { useControls } from "./hooks/useControls";
 // import Text from "./three/components/Text";
 import Roboto from './Roboto_Bold.json';
+import Track from './three/components/track'
 import Textito from './three/components/Text'
 
 
-function Jumbo() {
+function Texto() {
   const ref = useRef()
   // const [ref, api] = useBox(() => ({ mass: 1 }));
   useFrame(({ clock }) => (ref.current.rotation.x = ref.current.rotation.y = ref.current.rotation.z = Math.sin(clock.getElapsedTime()) * 0.3))
   return (
     <group ref={ref}>
-      <Textito hAlign="right" position={[-12, 6.5, 0]} children="REACT" />
-      <Textito hAlign="right" position={[-12, 0, 0]} children="THREE" />
-      <Textito hAlign="right" position={[-12, -6.5, 0]} children="FIBER" />
+      <Textito hAlign="right" position={[-12, 6.5, 0]} children="HELLO" />
+      <Textito hAlign="right" position={[-12, 0, 0]} children={`I AM`} />
+      <Textito hAlign="right" position={[-12, -6.5, 0]} children="JOSE" />
     </group>
   )
 }
@@ -43,6 +44,9 @@ function Rig({ children }) {
   const inner = useRef()
   let mouse = new THREE.Vector2(-250, 50)
   useFrame(({ camera, clock }) => {
+    if (clock.oldTime > 4000 && clock.oldTime < 6000) {
+      outer.current.position.y = THREE.MathUtils.lerp(outer.current.position.y-10, 8, 0.01)
+    }else
         if (outer.current && inner.current) {
         outer.current.position.y = THREE.MathUtils.lerp(outer.current.position.y, 8, 0.01)
         inner.current.rotation.y = Math.sin(clock.getElapsedTime() / 8) * Math.PI
@@ -216,7 +220,7 @@ export default function App() {
             {/* <Box /> */}
             {/* <VideoText position={[0, 1.3, -2]} texto={`Hi! I'm Jose`} /> */}
             {/* <Textree position={[0, 1.3, -2]} texto={`Hi! I'`}  /> */}
-            <Jumbo />
+            <Texto />
             {/* <VideoText position={[+15, -1.4, -2]} texto={`My world is app development`} /> */}
             {/* <Plane
             color="lightblue"
@@ -224,6 +228,7 @@ export default function App() {
             position={[0, 0, 0]}
             scale={[400, 400, 0.2]}
           /> */}
+          <Track/>
           </Physics>
         </Suspense>
       </Canvas>
