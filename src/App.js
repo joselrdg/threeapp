@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { Canvas, useLoader, useFrame } from "@react-three/fiber";
 import {
@@ -18,50 +18,59 @@ import {
   useRaycastVehicle,
 } from "@react-three/cannon";
 import { useControls } from "./hooks/useControls";
+// import Text from "./three/components/Text";
+import Roboto from './Roboto_Bold.json';
+import Textito from './three/components/Text'
+
+
+function Jumbo() {
+  const ref = useRef()
+  // const [ref, api] = useBox(() => ({ mass: 1 }));
+  useFrame(({ clock }) => (ref.current.rotation.x = ref.current.rotation.y = ref.current.rotation.z = Math.sin(clock.getElapsedTime()) * 0.3))
+  return (
+    <group ref={ref}>
+      <Textito hAlign="right" position={[-12, 6.5, 0]} children="REACT" />
+      <Textito hAlign="right" position={[-12, 0, 0]} children="THREE" />
+      <Textito hAlign="right" position={[-12, -6.5, 0]} children="FIBER" />
+    </group>
+  )
+}
 
 const vl = 10;
 
 function Rig({ children }) {
- let mouse = new THREE.Vector2(-250, 50)
   const outer = useRef()
   const inner = useRef()
-  const main = useRef()
+  let mouse = new THREE.Vector2(-250, 50)
   useFrame(({ camera, clock }) => {
-    if (outer.current && inner.current) {
-      outer.current.position.y = THREE.MathUtils.lerp(outer.current.position.y, 0, 0.05)
-      inner.current.rotation.y = Math.sin(clock.getElapsedTime() / 8) * Math.PI
-      inner.current.position.z = 5 + -Math.sin(clock.getElapsedTime() / 2) * 10
-      inner.current.position.y = -5 + Math.sin(clock.getElapsedTime() / 2) * 2
-
-
- 
-    }
+        if (outer.current && inner.current) {
+        outer.current.position.y = THREE.MathUtils.lerp(outer.current.position.y, 8, 0.01)
+        inner.current.rotation.y = Math.sin(clock.getElapsedTime() / 8) * Math.PI
+        inner.current.position.z = 10 + -Math.sin(clock.getElapsedTime() / 2) * 2
+        inner.current.position.y = -5 + Math.sin(clock.getElapsedTime() / 2) * 2
+      }
   })
   return (
-    <group position={[0, -100, 0]} ref={outer}>
+    <group position={[0, -200, 0]} ref={outer}>
       <group ref={inner}>{children}</group>
     </group>
   )
 }
 
-function VideoText({ clicked, ...props }) {
-  const [video] = useState(() =>
-    Object.assign(document.createElement("video"), {
-      src: "/drei.mp4",
-      crossOrigin: "Anonymous",
-      loop: true,
-    })
-  );
-  useEffect(() => void (clicked && video.play()), [video, clicked]);
+
+
+function VideoText({ clicked, texto, ...props }) {
+
   return (
     <Text font="/Inter-Bold.woff" fontSize={3} letterSpacing={-0.06} {...props}>
-       Hi! I'm Jose
+      {texto}
       {/* <meshBasicMaterial toneMapped={false}>
         <videoTexture attach="map" args={[video]} encoding={THREE.sRGBEncoding} />
       </meshBasicMaterial> */}
     </Text>
   );
 }
+
 
 function Box({
   radius = 0.7,
@@ -161,6 +170,7 @@ export default function App() {
   const [clicked, setClicked] = useState(true);
   const [ready, setReady] = useState(true);
   const store = { clicked, setClicked, ready, setReady };
+
   return (
     <div id="canvas-container">
       <div className="bg" />
@@ -182,36 +192,39 @@ export default function App() {
           // gl.setClearColor(new THREE.Color("#020209"));
         }}
       >
-          <Rig>
-        <PerspectiveCamera makeDefault position={[0, 0, 16]} fov={75}>
-          <pointLight intensity={1} position={[-10, -25, -10]} />
-          <spotLight
-            castShadow
-            intensity={2.25}
-            angle={0.2}
-            penumbra={1}
-            position={[-25, 20, -15]}
-            shadow-mapSize={[1024, 1024]}
-            shadow-bias={-0.0001}
-          />
-        </PerspectiveCamera>
-          </Rig>
-        <OrbitControls />
+        <Rig>
+          <PerspectiveCamera makeDefault position={[0, 0, 16]} fov={75}>
+            <pointLight intensity={1} position={[-10, -25, -10]} />
+            <spotLight
+              castShadow
+              intensity={2.25}
+              angle={0.2}
+              penumbra={1}
+              position={[-25, 20, -15]}
+              shadow-mapSize={[1024, 1024]}
+              shadow-bias={-0.0001}
+            />
+          </PerspectiveCamera>
+        </Rig>
         <Stars />
+        <OrbitControls />
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 15, 10]} angle={0.3} />
         {/* <Jumbo/> */}
         <Suspense fallback={null}>
-        <Physics>
-          {/* <Box /> */}
-          <VideoText position={[0, 1.3, -2]} />
-          {/* <Plane
+          <Physics>
+            {/* <Box /> */}
+            {/* <VideoText position={[0, 1.3, -2]} texto={`Hi! I'm Jose`} /> */}
+            {/* <Textree position={[0, 1.3, -2]} texto={`Hi! I'`}  /> */}
+            <Jumbo />
+            {/* <VideoText position={[+15, -1.4, -2]} texto={`My world is app development`} /> */}
+            {/* <Plane
             color="lightblue"
             rotation-x={-Math.PI / 2}
             position={[0, 0, 0]}
             scale={[400, 400, 0.2]}
           /> */}
-        </Physics>
+          </Physics>
         </Suspense>
       </Canvas>
     </div>
