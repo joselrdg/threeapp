@@ -23,6 +23,7 @@ import Roboto from './Roboto_Bold.json';
 import Track from './three/components/track'
 import Textito from './three/components/Text'
 import Rig from './three/components/Rig'
+import {Player} from './three/components/Player'
 
 
 function Cam({ position, text, nmass = 0 }) {
@@ -210,11 +211,11 @@ export default function App() {
         dpr={[1, 1.5]}
         gl={{ antialias: false }}
         camera={{ position: [30, 20, 20], near: 0.01, far: 10000 }}
-        onCreated={({ gl, camera }) => {
+        // onCreated={({ gl, camera }) => {
           // actions.init(camera);
           // gl.toneMapping = THREE.Uncharted2ToneMapping;
           // gl.setClearColor(new THREE.Color("#020209"));
-        }}
+        // }}
       >
         {/* <Rigs> */}
           {/* <PerspectiveCamera makeDefault position={[0, 0, 16]} fov={100}>
@@ -222,14 +223,14 @@ export default function App() {
           </PerspectiveCamera> */}
         {/* </Rigs> */}
         <Stars />
-        <OrbitControls />
+        {/* <OrbitControls /> */}
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 15, 10]} angle={0.3} />
         {/* <Jumbo/> */}
         <Suspense fallback={null}>
           <Physics>
             {/* <Cam /> */}
-
+            <Player position={[0, 3, 10]} />
             <Box />
             {/* <VideoText position={[0, 1.3, -2]} texto={`Hi! I'm Jose`} /> */}
             {/* <Textree position={[0, 1.3, -2]} texto={`Hi! I'`}  /> */}
