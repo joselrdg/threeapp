@@ -216,11 +216,11 @@ export default function App() {
           // gl.setClearColor(new THREE.Color("#020209"));
         }}
       >
-        <Rigs>
-          <PerspectiveCamera makeDefault position={[0, 0, 16]} fov={100}>
+        {/* <Rigs> */}
+          {/* <PerspectiveCamera makeDefault position={[0, 0, 16]} fov={100}>
 
-          </PerspectiveCamera>
-        </Rigs>
+          </PerspectiveCamera> */}
+        {/* </Rigs> */}
         <Stars />
         <OrbitControls />
         <ambientLight intensity={0.5} />
@@ -228,18 +228,18 @@ export default function App() {
         {/* <Jumbo/> */}
         <Suspense fallback={null}>
           <Physics>
-            <Cam />
+            {/* <Cam /> */}
 
             <Box />
             {/* <VideoText position={[0, 1.3, -2]} texto={`Hi! I'm Jose`} /> */}
             {/* <Textree position={[0, 1.3, -2]} texto={`Hi! I'`}  /> */}
             {/* <VideoText position={[+15, -1.4, -2]} texto={`My world is app development`} /> */}
-            {/* <Plane
+            <Plane
             color="lightblue"
             rotation-x={-Math.PI / 2}
-            position={[0, 0, 0]}
+            position={[0, -100, 0]}
             scale={[400, 400, 0.2]}
-          /> */}
+          />
           </Physics>
         </Suspense>
       </Canvas>
