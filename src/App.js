@@ -22,40 +22,55 @@ import { useControls } from "./hooks/useControls";
 import Roboto from './Roboto_Bold.json';
 import Track from './three/components/track'
 import Textito from './three/components/Text'
+import Rig from './three/components/Rig'
 
 
-function Texto() {
-  const ref = useRef()
-  // const [ref, api] = useBox(() => ({ mass: 1 }));
-  useFrame(({ clock }) => (ref.current.rotation.x = ref.current.rotation.y = ref.current.rotation.z = Math.sin(clock.getElapsedTime()) * 0.3))
+function Cam({ position, text, nmass = 0 }) {
+
+  return (
+    <group>
+      <Texto position={[0, 6.5, 0]} text='Hi!' />
+      <Texto position={[12, 0, -50]} text={`I'm José`} />
+      <Texto position={[12, -6.5, -100]} text={`I'm development web`} />
+    </group>
+  )
+}
+
+function Texto({ position, text, nmass = 0 }) {
+  // const ref = useRef()
+  const [ref, api] = useBox(() => ({ mass: nmass }));
+  console.log(api)
+  useFrame(({ clock }) => {
+    ref.current.rotation.x = ref.current.rotation.y = ref.current.rotation.z = Math.sin(clock.getElapsedTime()) * 0.3;
+    if (clock.oldTime > 300) {
+      api.mass.set(1)
+    }
+    
+  })
   return (
     <group ref={ref}>
-      <Textito hAlign="right" position={[-12, 6.5, 0]} children="HELLO" />
-      <Textito hAlign="right" position={[-12, 0, 0]} children={`I AM`} />
-      <Textito hAlign="right" position={[-12, -6.5, 0]} children="JOSE" />
+      <Textito hAlign="right" position={position} children={text} />
     </group>
   )
 }
 
 const vl = 10;
 
-function Rig({ children }) {
+function Rigs({ children }) {
   const outer = useRef()
   const inner = useRef()
-  let mouse = new THREE.Vector2(-250, 50)
-  useFrame(({ camera, clock }) => {
-    if (clock.oldTime > 4000 && clock.oldTime < 6000) {
-      outer.current.position.y = THREE.MathUtils.lerp(outer.current.position.y-10, 8, 0.01)
-    }else
-        if (outer.current && inner.current) {
-        outer.current.position.y = THREE.MathUtils.lerp(outer.current.position.y, 8, 0.01)
-        inner.current.rotation.y = Math.sin(clock.getElapsedTime() / 8) * Math.PI
-        inner.current.position.z = 10 + -Math.sin(clock.getElapsedTime() / 2) * 2
-        inner.current.position.y = -5 + Math.sin(clock.getElapsedTime() / 2) * 2
-      }
+  useFrame((state, delta) => {
+    let { clock } = state;
+    state.camera.focus = 50
+    if (outer.current && inner.current) {
+      outer.current.position.y = THREE.MathUtils.lerp(outer.current.position.y, 8, 0.01)
+      inner.current.rotation.y = Math.sin(clock.getElapsedTime() / 8) * Math.PI
+      inner.current.position.z = 10 + -Math.sin(clock.getElapsedTime() / 2) * 20
+      inner.current.position.y = -5 + Math.sin(clock.getElapsedTime() / 2) * 20
+    }
   })
   return (
-    <group position={[0, -200, 0]} ref={outer}>
+    <group position={[0, -100, 0]} ref={outer}>
       <group ref={inner}>{children}</group>
     </group>
   )
@@ -170,10 +185,16 @@ function Plane({ color, ...props }) {
 //   );
 // }
 
+
+
+
+
+
 export default function App() {
   const [clicked, setClicked] = useState(true);
   const [ready, setReady] = useState(true);
   const store = { clicked, setClicked, ready, setReady };
+
 
   return (
     <div id="canvas-container">
@@ -190,26 +211,16 @@ export default function App() {
         gl={{ antialias: false }}
         camera={{ position: [30, 20, 20], near: 0.01, far: 10000 }}
         onCreated={({ gl, camera }) => {
-          console.log(camera);
           // actions.init(camera);
           // gl.toneMapping = THREE.Uncharted2ToneMapping;
           // gl.setClearColor(new THREE.Color("#020209"));
         }}
       >
-        <Rig>
-          <PerspectiveCamera makeDefault position={[0, 0, 16]} fov={75}>
-            <pointLight intensity={1} position={[-10, -25, -10]} />
-            <spotLight
-              castShadow
-              intensity={2.25}
-              angle={0.2}
-              penumbra={1}
-              position={[-25, 20, -15]}
-              shadow-mapSize={[1024, 1024]}
-              shadow-bias={-0.0001}
-            />
+        <Rigs>
+          <PerspectiveCamera makeDefault position={[0, 0, 16]} fov={100}>
+
           </PerspectiveCamera>
-        </Rig>
+        </Rigs>
         <Stars />
         <OrbitControls />
         <ambientLight intensity={0.5} />
@@ -217,10 +228,11 @@ export default function App() {
         {/* <Jumbo/> */}
         <Suspense fallback={null}>
           <Physics>
-            {/* <Box /> */}
+            <Cam />
+
+            <Box />
             {/* <VideoText position={[0, 1.3, -2]} texto={`Hi! I'm Jose`} /> */}
             {/* <Textree position={[0, 1.3, -2]} texto={`Hi! I'`}  /> */}
-            <Texto />
             {/* <VideoText position={[+15, -1.4, -2]} texto={`My world is app development`} /> */}
             {/* <Plane
             color="lightblue"
@@ -228,7 +240,6 @@ export default function App() {
             position={[0, 0, 0]}
             scale={[400, 400, 0.2]}
           /> */}
-          <Track/>
           </Physics>
         </Suspense>
       </Canvas>
