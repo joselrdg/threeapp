@@ -1,7 +1,8 @@
 import "./App.css";
 import React, { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
-import { Canvas, useLoader, useFrame } from "@react-three/fiber";
+import { Canvas, useLoader, useFrame,  } from "@react-three/fiber";
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import {
   OrbitControls,
   Stars,
@@ -9,7 +10,8 @@ import {
   Text,
   useTexture,
   useGLTF,
-  PerspectiveCamera
+  PerspectiveCamera,
+  useHelper
 } from "@react-three/drei";
 import {
   Physics,
@@ -21,6 +23,24 @@ import { useControls } from "./hooks/useControls";
 // import Text from "./three/components/Text";
 import Roboto from './Roboto_Bold.json';
 
+const Player = ()=>{
+  const fbx = useLoader(FBXLoader, 'FireFighter.fbx')
+  console.log(fbx)
+  return <primitive object={fbx} scale={[5,5,5]}/>
+  // const fbx = useFBX('FireFighter.fbx')
+  // return <primitive object={fbx} />
+}
+
+
+const Ground = () => {
+
+  return (
+    <mesh rotation={[-Math.PI / 2,0,0]} receiveShadow>
+      <planeBufferGeometry arg={[10000, 10000]} />
+      <meshPhongMaterial />
+    </mesh>
+  )
+}
 
 
 
@@ -39,10 +59,14 @@ export default function App() {
       // gl.setClearColor(new THREE.Color("#020209"));
       // }}
       >
-        <Stars />
+        <Suspense fallback={null} >
+        {/* <Stars /> */}
+        <hemisphereLight arg={[0xffffff,0x444444]} position={[ 0, 200, 0 ]}/>
+        {/* <Ground/> */}
         <OrbitControls />
         <ambientLight intensity={0.5} />
-
+        <Player/>
+        </Suspense>
       </Canvas>
     </div>
   );
