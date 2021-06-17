@@ -50,7 +50,7 @@ export default function App() {
         shadows
         dpr={[1, 1.5]}
         gl={{ antialias: false }}
-        camera={{ position: [30, 20, 20], near: 0.01, far: 10000 }}
+        camera={{ position: [10, 20, 20], near: 0.01, far: 10000 }}
       // onCreated={({ gl, camera }) => {
       // actions.init(camera);
       // gl.toneMapping = THREE.Uncharted2ToneMapping;

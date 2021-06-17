@@ -15,8 +15,7 @@ import { Vector3 } from 'three';
 const SPEED = 6;
 
 
-export default function Model(props) {
-  const { camera } = useThree();
+export default function Model() {
   const {
     moveForward,
     moveBackward,
@@ -28,65 +27,39 @@ export default function Model(props) {
   const { nodes, materials, animations } = useGLTF('/ok.gltf')
   const { actions } = useAnimations(animations, group)
 
-  const [ref, api] = useSphere(() => ({
-    mass: 0,
-    type: 'Dynamic',
-    ...props,
-  }));
-
-  const velocity = useRef([0, 0, 0]);
   useEffect(() => {
-    api.velocity.subscribe((v) => (velocity.current = v));
+    // api.velocity.subscribe((v) => (velocity.current = v));
     actions.Idl.play();
-    console.log(group.current.rotation)
-  }, [api.velocity]);
-  
-  useFrame(() => {
-    group.current.position.copy(ref.current.position);
-    group.current.rotation.copy(ref.current.rotation);
+  }, []);
 
-    const camaraVect = new Vector3(ref.current.position.x,ref.current.position.y + 3, ref.current.position.z+3)
-    
-    camera.position.copy(camaraVect);
-
-    const direction = new Vector3();
-
-    const frontVector = new Vector3(
-      0,
-      0,
-      (moveBackward ? 1 : 0) - (moveForward ? 1 : 0),
-    );
-    const sideVector = new Vector3(
-      (moveLeft ? 1 : 0) - (moveRight ? 1 : 0),
-      0,
-      0,
-    );
-
-    direction
-      .subVectors(frontVector, sideVector)
-      .normalize()
-      .multiplyScalar(SPEED)
-      .applyEuler(camera.rotation);
-
-    api.velocity.set(direction.x, velocity.current[1], direction.z);
-
-    if (jump && Math.abs(velocity.current[1].toFixed(2)) < 0.05) {
-      api.velocity.set(velocity.current[0], 8, velocity.current[2]);
-    }
-  });
-
- 
-
+  const dirRot = useRef(0)
+  if (moveForward && moveLeft) {
+    dirRot.current = 1.5
+  } else if (moveForward && moveRight) {
+    dirRot.current = -2.5
+  } else if (moveBackward && moveLeft) {
+    dirRot.current = 0.5
+  } else if (moveBackward && moveRight) {
+    dirRot.current = -1
+  } else if (moveForward) {
+    dirRot.current = 2.5
+  } else if (moveBackward) {
+    dirRot.current = 0
+  }  else if (moveLeft) {
+    dirRot.current = 1
+  }  else if (moveRight) {
+    dirRot.current = -1.5
+  }
 
   return (
-    
-    <group ref={group} {...props} dispose={null} position={[0, 0, 0]}>
-      <FPVControls />
+
+    <group ref={group} dispose={null} position={[0, 0, 0]}>
+      {/* <FPVControls /> */}
 
       {/* <group name="Camera" position={[0, 300, -600]} rotation={[Math.PI / 2, 0, 0]}>
         <PerspectiveCamera fov={40} near={10} far={1000} />
       </group> */}
-      <group rotation={[Math.PI / 2, 0, 0]} scale={[0.01, 0.01, 0.01]}>
+      <group rotation={[Math.PI / 2, 0, dirRot.current]} scale={[0.01, 0.01, 0.01]}>
         <primitive object={nodes.mixamorigHips} />
         <skinnedMesh geometry={nodes.Ch46.geometry} material={materials.Ch46_body} skeleton={nodes.Ch46.skeleton} />
       </group>
