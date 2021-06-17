@@ -7,6 +7,8 @@ import { useGLTF, useAnimations, PerspectiveCamera } from '@react-three/drei'
 import { useKeyboardControls } from '../hooks/useKeyboardControls';
 import { useSphere, useBox } from '@react-three/cannon';
 import { useThree, useFrame } from '@react-three/fiber'
+import { FPVControls } from './FPVControls';
+
 import { Vector3 } from 'three';
 
 
@@ -42,8 +44,10 @@ export default function Model(props) {
   useFrame(() => {
     group.current.position.copy(ref.current.position);
     group.current.rotation.copy(ref.current.rotation);
+
+    const camaraVect = new Vector3(ref.current.position.x,ref.current.position.y + 3, ref.current.position.z+3)
     
-    // camera.position.copy(ref.current.position);
+    camera.position.copy(camaraVect);
 
     const direction = new Vector3();
 
@@ -75,7 +79,10 @@ export default function Model(props) {
 
 
   return (
+    
     <group ref={group} {...props} dispose={null} position={[0, 0, 0]}>
+      <FPVControls />
+
       {/* <group name="Camera" position={[0, 300, -600]} rotation={[Math.PI / 2, 0, 0]}>
         <PerspectiveCamera fov={40} near={10} far={1000} />
       </group> */}

@@ -60,7 +60,7 @@ export default function App() {
         <PerspectiveCamera fov={40} near={10} far={1000} />
         <Suspense fallback={null} >
           {/* <Stars /> */}
-          <OrbitControls />
+          {/* <OrbitControls /> */}
           <hemisphereLight arg={[0xffffff, 0x444444]} position={[0, 200, 0]} />
           <Physics>
           <Ground />
