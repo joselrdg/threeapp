@@ -1,5 +1,17 @@
+.container-app {
+  position: 'relative';
+
+}
+
 #canvas-container {
+  position: absolute;
   width: 100vw;
   height: 100vh;
   background: radial-gradient(at 50% 100%, #873740 0%, #272730 40%, #171720 80%, #070710 100%);
+}
+
+.joystick{
+  position: relative;
+  top: calc(100vh - 160px);
+  margin-left: 50%;
 }

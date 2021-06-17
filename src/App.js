@@ -11,7 +11,9 @@ import {
   useTexture,
   useGLTF,
   PerspectiveCamera,
-  useHelper, useAnimations
+  useHelper,
+  useAnimations,
+  Html
 } from "@react-three/drei";
 import {
   Physics,
@@ -23,7 +25,9 @@ import { useControls } from "./hooks/useControls";
 // import Text from "./three/components/Text";
 import Roboto from './Roboto_Bold.json';
 import Ok from './three/Ok.js'
-import {Player} from './three/Player'
+import { Player } from './three/Player'
+import { Joystick } from 'react-joystick-component';
+
 
 
 
@@ -41,34 +45,55 @@ const Ground = () => {
 }
 
 
-
 export default function App() {
+  const joyRef = useRef()
+  const stopJoyRef = useRef(true)
+  const moveJoy = (e) => {
+    joyRef.current = e
+    stopJoyRef.current = false
+    console.log(joyRef)
+  }
+
+  const stopJoy = (e) => {
+    stopJoyRef.current = true
+    console.log(stopJoyRef)
+  }
+
   return (
-    <div id="canvas-container">
-      <Canvas
-        linear
-        shadows
-        dpr={[1, 1.5]}
-        gl={{ antialias: false }}
-        camera={{ position: [10, 20, 20], near: 0.01, far: 10000 }}
-      // onCreated={({ gl, camera }) => {
-      // actions.init(camera);
-      // gl.toneMapping = THREE.Uncharted2ToneMapping;
-      // gl.setClearColor(new THREE.Color("#020209"));
-      // }}
-      >
-        <PerspectiveCamera fov={40} near={10} far={1000} />
-        <Suspense fallback={null} >
-          {/* <Stars /> */}
-          {/* <OrbitControls /> */}
-          <hemisphereLight arg={[0xffffff, 0x444444]} position={[0, 200, 0]} />
-          <Physics>
-          <Ground />
-          <ambientLight intensity={0.5} />
-          <Player />
-          </Physics>
-        </Suspense>
-      </Canvas>
-    </div>
+    <>
+
+      <div id="canvas-container">
+        <Canvas
+          linear
+          shadows
+          dpr={[1, 1.5]}
+          gl={{ antialias: false }}
+          camera={{ name: 'cma', position: [10, 20, 20], near: 0.01, far: 10000 }}
+        // onCreated={({ gl, camera }) => {
+        // actions.init(camera);
+        // gl.toneMapping = THREE.Uncharted2ToneMapping;
+        // gl.setClearColor(new THREE.Color("#020209"));
+        // }}
+        >
+          <Suspense fallback={null} >
+            {/* <PerspectiveCamera fov={40} near={10} far={1000} /> */}
+            {/* <Stars /> */}
+            {/* <OrbitControls /> */}
+            <hemisphereLight arg={[0xffffff, 0x444444]} position={[0, 200, 0]} />
+            {/* <PerspectiveCamera  ref={myCamera} position={[10, 0, 20]}  fov={40} near={10} far={1000} /> */}
+            <Physics>
+              <Ground />
+              <ambientLight intensity={0.5} />
+              <Player />
+            </Physics>
+          </Suspense>
+
+
+        </Canvas>
+      </div>
+      <div className="joystick">
+        <Joystick size={100} baseColor="red" stickColor="blue" move={moveJoy} stop={stopJoy}></Joystick>
+      </div>
+    </>
   );
 }
