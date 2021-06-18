@@ -13,5 +13,5 @@
 .joystick{
   position: relative;
   top: calc(100vh - 160px);
-  margin-left: 50%;
+  margin-left: calc(50% - 50px);
 }

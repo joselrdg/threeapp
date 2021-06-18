@@ -12,7 +12,9 @@ export default function Model({
   moveBackward,
   moveLeft,
   moveRight,
-  camerarotation,
+  moveJoystick,
+  stopJoystick,
+  rotationPlayer
 }) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('/ChicaT.gltf')
@@ -22,15 +24,17 @@ export default function Model({
 
 const vrota = 0.3
 
-  console.log(camerarotation)
   useEffect(() => {
     actions.OrcIdle.play();
   }, []);
 
+  
   let animachoi = false;
   useFrame(() => {
 
   })
+console.log(moveForward)
+
   if (moveForward && moveLeft) {
     if (dirRot.current > 2.2) {
       dirRot.current -= vrota
@@ -70,7 +74,7 @@ const vrota = 0.3
   } else if (moveBackward) {
     animachoi = true
     if (dirRot.current > 0) {
-      dirRot.current -= vrota
+      dirRot.current.rotation-= vrota
     } else if (dirRot.current < 0) {
       dirRot.current += vrota
     }
@@ -99,7 +103,7 @@ const vrota = 0.3
   }
   return (
     <group ref={group} dispose={null}>
-      <group rotation={[Math.PI / 2, 0, dirRot.current]} scale={[0.01, 0.01, 0.01]}>
+      <group rotation={[Math.PI / 2, 0, rotationPlayer]} scale={[0.01, 0.01, 0.01]}>
         <primitive object={nodes.mixamorigHips} />
         <skinnedMesh
           geometry={nodes.Ch46.geometry}

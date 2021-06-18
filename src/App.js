@@ -46,17 +46,15 @@ const Ground = () => {
 
 
 export default function App() {
-  const joyRef = useRef()
+  const joyRef = useRef({y: 30, x: 3})
   const stopJoyRef = useRef(true)
+
   const moveJoy = (e) => {
     joyRef.current = e
     stopJoyRef.current = false
-    console.log(joyRef)
   }
-
   const stopJoy = (e) => {
     stopJoyRef.current = true
-    console.log(stopJoyRef)
   }
 
   return (
@@ -80,19 +78,17 @@ export default function App() {
             {/* <Stars /> */}
             {/* <OrbitControls /> */}
             <hemisphereLight arg={[0xffffff, 0x444444]} position={[0, 200, 0]} />
-            {/* <PerspectiveCamera  ref={myCamera} position={[10, 0, 20]}  fov={40} near={10} far={1000} /> */}
+            {/* <PerspectiveCamera   name='cma' position={[10, 0, 20]}  fov={40} near={0.01} far={1000} /> */}
             <Physics>
               <Ground />
               <ambientLight intensity={0.5} />
-              <Player />
+              <Player moveJoystick={joyRef} stopJoystick={stopJoyRef}/>
             </Physics>
           </Suspense>
-
-
         </Canvas>
       </div>
       <div className="joystick">
-        <Joystick size={100} baseColor="red" stickColor="blue" move={moveJoy} stop={stopJoy}></Joystick>
+        <Joystick size={100} baseColor="red" stickColor="blue" move={moveJoy} stop={stopJoy}/>
       </div>
     </>
   );
