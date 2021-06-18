@@ -7,93 +7,19 @@ import { useGLTF, useAnimations } from '@react-three/drei'
 import { useKeyboardControls } from '../hooks/useKeyboardControls'
 import { useFrame } from '@react-three/fiber'
 
-export default function Model({
-  moveForward,
-  moveBackward,
-  moveLeft,
-  moveRight,
-  moveJoystick,
-  stopJoystick,
-  rotationPlayer
-}) {
+export default function Model({run}) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('/ChicaT.gltf')
   const { actions } = useAnimations(animations, group)
 
-  const dirRot = useRef(0)
-
-const vrota = 0.3
 
   useEffect(() => {
-    actions.OrcIdle.play();
+    // actions.OrcIdle.play();
   }, []);
 
-  
+  console.log(run)
   let animachoi = false;
-  useFrame(() => {
 
-  })
-console.log(moveForward)
-
-  if (moveForward && moveLeft) {
-    if (dirRot.current > 2.2) {
-      dirRot.current -= vrota
-    } else if (dirRot.current < 2.2) {
-      dirRot.current += vrota
-    }
-    // dirRot.current = 2.2
-    animachoi = true
-  } else if (moveForward && moveRight) {
-    if (dirRot.current > 4.2) {
-      dirRot.current -= vrota
-    } else if (dirRot.current < 4.2) {
-      dirRot.current += vrota
-    }
-    animachoi = true
-  } else if (moveBackward && moveLeft) {
-    animachoi = true
-    if (dirRot.current > 0.5) {
-      dirRot.current -= vrota
-    } else if (dirRot.current < 0.5) {
-      dirRot.current += vrota
-    }
-  } else if (moveBackward && moveRight) {
-    animachoi = true
-    if (dirRot.current > 5.8) {
-      dirRot.current -= vrota
-    } else if (dirRot.current < 5.8) {
-      dirRot.current += vrota
-    }
-  } else if (moveForward) {
-    animachoi = true
-    if (dirRot.current > 3) {
-      dirRot.current -= vrota
-    } else if (dirRot.current < 3) {
-      dirRot.current += vrota
-    }
-  } else if (moveBackward) {
-    animachoi = true
-    if (dirRot.current > 0) {
-      dirRot.current.rotation-= vrota
-    } else if (dirRot.current < 0) {
-      dirRot.current += vrota
-    }
-  } else if (moveLeft) {
-    animachoi = true
-    if (dirRot.current > 1.5) {
-      dirRot.current -= vrota
-    } else if (dirRot.current < 1.5) {
-      dirRot.current += vrota
-    }
-  } else if (moveRight) {
-    animachoi = true
-    dirRot.current = 4.5
-    if (dirRot.current > 4.5) {
-      dirRot.current -= vrota
-    } else if (dirRot.current < 4.5) {
-      dirRot.current += vrota
-    }
-  }
   if (actions.OrcIdle) {
     if (animachoi) {
       actions.Running.play();
@@ -103,7 +29,7 @@ console.log(moveForward)
   }
   return (
     <group ref={group} dispose={null}>
-      <group rotation={[Math.PI / 2, 0, rotationPlayer]} scale={[0.01, 0.01, 0.01]}>
+      <group rotation={[Math.PI / 2, 0, 0]} scale={[0.01, 0.01, 0.01]}>
         <primitive object={nodes.mixamorigHips} />
         <skinnedMesh
           geometry={nodes.Ch46.geometry}
