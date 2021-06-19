@@ -48,13 +48,15 @@ const Ground = () => {
 export default function App() {
   const joyRef = useRef({y: 30, x: 3})
   const stopJoyRef = useRef(true)
+  const [stopJoyState, setStopJoyState] = useState(false)
 
   const moveJoy = (e) => {
     joyRef.current = e
-    stopJoyRef.current = false
+    setStopJoyState(false)
   }
+
   const stopJoy = (e) => {
-    stopJoyRef.current = true
+    setStopJoyState(true)
   }
 
   return (
@@ -82,7 +84,7 @@ export default function App() {
             <Physics>
               <Ground />
               <ambientLight intensity={0.5} />
-              <Player moveJoystick={joyRef} stopJoystick={stopJoyRef}/>
+              <Player moveJoystick={joyRef} stopJoystick={stopJoyState}/>
             </Physics>
           </Suspense>
         </Canvas>

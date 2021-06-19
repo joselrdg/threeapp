@@ -67,9 +67,9 @@ export const Player = ({ moveJoystick, stopJoystick }) => {
     camera.position.copy(camaraVect);
 
     const direction = new Vector3(
-      !stopJoystick.current ? (moveJoystick.current.x / 50) : 0,
+      !stopJoystick ? (moveJoystick.current.x / 50) : 0,
       0,
-      !stopJoystick.current ? (moveJoystick.current.y / -50) : 0
+      !stopJoystick ? (moveJoystick.current.y / -50) : 0
     );
 
     // if (moveJoystick.current.direction === 'RIGHT' && direction.z === 0 && !stopJoystick.current) {
@@ -82,15 +82,15 @@ export const Player = ({ moveJoystick, stopJoystick }) => {
     //   api.rotation.set(0, 3 + (direction.z), 0)
     // }
 
-    if (direction.z > 0 && direction.x > 0 && !stopJoystick.current) {
+    if (direction.z > 0 && direction.x > 0 && !stopJoystick) {
       api.rotation.set(0, 1.6 - (direction.z + 0.1), 0)
-    } else if (direction.z < 0 && direction.x > 0 && !stopJoystick.current) {
+    } else if (direction.z < 0 && direction.x > 0 && !stopJoystick) {
       api.rotation.set(0, 1.6 + (direction.z * -2), 0)
     }
-    else if (direction.z < 0 && direction.x < 0 && !stopJoystick.current) {
+    else if (direction.z < 0 && direction.x < 0 && !stopJoystick) {
       api.rotation.set(0, 3.6 + (direction.x * -2), 0)
     }
-    else if (direction.z > 0 && direction.x < 0 && !stopJoystick.current) {
+    else if (direction.z > 0 && direction.x < 0 && !stopJoystick) {
       api.rotation.set(0, -0.7 + (direction.z * 1.2), 0)
     }
 
@@ -105,8 +105,6 @@ export const Player = ({ moveJoystick, stopJoystick }) => {
     if (jump && Math.abs(velocity.current[1].toFixed(2)) < 0.05) {
       api.velocity.set(velocity.current[0], 8, velocity.current[2]);
     }
-  
-    console.log(stopJoystick.current)
   });
 
   return (
@@ -114,11 +112,12 @@ export const Player = ({ moveJoystick, stopJoystick }) => {
       {/* <FPVControls /> */}
       <mesh ref={ref} >
         {/* <boxBufferGeometry /> */}
+
         {
-         stopJoystick.current ? 
-         <ChicaT run={false}/>
-         :<ChicaT run={true}/>
+
         }
+       
+         <ChicaT run={stopJoystick}/>
       </mesh>
     </>
   );

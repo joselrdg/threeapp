@@ -12,16 +12,13 @@ export default function Model({run}) {
   const { nodes, materials, animations } = useGLTF('/ChicaT.gltf')
   const { actions } = useAnimations(animations, group)
 
-
   useEffect(() => {
     // actions.OrcIdle.play();
   }, []);
-
-  console.log(run)
-  let animachoi = false;
-
+console.log('run')
+console.log(run)
   if (actions.OrcIdle) {
-    if (animachoi) {
+    if (run) {
       actions.Running.play();
     } else {
       actions.OrcIdle.play();
