@@ -7,21 +7,22 @@ import { useGLTF, useAnimations } from '@react-three/drei'
 import { useKeyboardControls } from '../hooks/useKeyboardControls'
 import { useFrame } from '@react-three/fiber'
 
-export default function Model({run}) {
+export default function Model({ run }) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('/ChicaT.gltf')
   const { actions } = useAnimations(animations, group)
 
   useEffect(() => {
-    // actions.OrcIdle.play();
+    actions.OrcIdle.play();
   }, []);
-console.log('run')
-console.log(run)
   if (actions.OrcIdle) {
+    console.log(run)
     if (run) {
-      actions.Running.play();
+      actions.Running.stop()
+      actions.OrcIdle.play()
     } else {
-      actions.OrcIdle.play();
+      actions.OrcIdle.stop();
+      actions.Running.play()
     }
   }
   return (
