@@ -27,6 +27,7 @@ import Roboto from './Roboto_Bold.json';
 import Ok from './three/Ok.js'
 import { Player } from './three/Player'
 import { Joystick } from 'react-joystick-component';
+import { ZeroFactor } from "three";
 
 
 
@@ -34,11 +35,11 @@ import { Joystick } from 'react-joystick-component';
 
 
 
-const Ground = () => {
+const Ground = (x,z) => {
 
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-      <planeBufferGeometry arg={[10000, 10000]} />
+      <planeBufferGeometry arg={[x, z]} />
       <meshPhongMaterial />
     </mesh>
   )
@@ -82,7 +83,7 @@ export default function App() {
             <hemisphereLight arg={[0xffffff, 0x444444]} position={[0, 200, 0]} />
             {/* <PerspectiveCamera   name='cma' position={[10, 0, 20]}  fov={40} near={0.01} far={1000} /> */}
             <Physics>
-              <Ground />
+              <Ground x={1000} z={1000}/>
               <ambientLight intensity={0.5} />
               <Player moveJoystick={joyRef} stopJoystick={stopJoyState}/>
             </Physics>

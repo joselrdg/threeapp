@@ -15,6 +15,7 @@ export default function Model({ run }) {
   useEffect(() => {
     actions.OrcIdle.play();
   }, []);
+  
   if (actions.OrcIdle) {
     console.log(run)
     if (run) {
