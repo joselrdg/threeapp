@@ -17,7 +17,6 @@ export default function Model({ run }) {
   }, []);
   
   if (actions.OrcIdle) {
-    console.log(run)
     if (run) {
       actions.Running.stop()
       actions.OrcIdle.play()
@@ -28,7 +27,7 @@ export default function Model({ run }) {
   }
   return (
     <group ref={group} dispose={null}>
-      <group rotation={[Math.PI / 2, 0, 0]} scale={[0.01, 0.01, 0.01]}>
+      <group rotation={[Math.PI / 2, 0, 0]} scale={[1, 1, 1]}>
         <primitive object={nodes.mixamorigHips} />
         <skinnedMesh
           geometry={nodes.Ch46.geometry}

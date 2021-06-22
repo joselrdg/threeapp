@@ -28,6 +28,7 @@ import Ok from './three/Ok.js'
 import { Player } from './three/Player'
 import { Joystick } from 'react-joystick-component';
 import { ZeroFactor } from "three";
+import Groundpark from './Groundpark';
 
 
 
@@ -35,11 +36,10 @@ import { ZeroFactor } from "three";
 
 
 
-const Ground = (x,z) => {
-
+const Ground = (xF,zF,) => {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-      <planeBufferGeometry arg={[x, z]} />
+      <planeBufferGeometry arg={[xF, zF]} />
       <meshPhongMaterial />
     </mesh>
   )
@@ -48,16 +48,16 @@ const Ground = (x,z) => {
 
 export default function App() {
   const joyRef = useRef({y: 30, x: 3})
-  const stopJoyRef = useRef(true)
-  const [stopJoyState, setStopJoyState] = useState(false)
+  const stopJoyState = useRef(true)
+  // const [stopJoyState, setStopJoyState] = useState(true)
 
   const moveJoy = (e) => {
     joyRef.current = e
-    setStopJoyState(false)
+    stopJoyState.current = (false)
   }
 
   const stopJoy = (e) => {
-    setStopJoyState(true)
+    stopJoyState.current = (true)
   }
 
   return (
@@ -69,22 +69,14 @@ export default function App() {
           shadows
           dpr={[1, 1.5]}
           gl={{ antialias: false }}
-          camera={{ name: 'cma', position: [10, 20, 20], near: 0.01, far: 10000 }}
-        // onCreated={({ gl, camera }) => {
-        // actions.init(camera);
-        // gl.toneMapping = THREE.Uncharted2ToneMapping;
-        // gl.setClearColor(new THREE.Color("#020209"));
-        // }}
+          camera={{ name: 'cma', position: [1000, 2000, 2000], near: 0.01, far: 10000 }}
         >
           <Suspense fallback={null} >
-            {/* <PerspectiveCamera fov={40} near={10} far={1000} /> */}
-            {/* <Stars /> */}
-            {/* <OrbitControls /> */}
             <hemisphereLight arg={[0xffffff, 0x444444]} position={[0, 200, 0]} />
-            {/* <PerspectiveCamera   name='cma' position={[10, 0, 20]}  fov={40} near={0.01} far={1000} /> */}
             <Physics>
-              <Ground x={1000} z={1000}/>
+              <Groundpark/>
               <ambientLight intensity={0.5} />
+              <OrbitControls/>
               <Player moveJoystick={joyRef} stopJoystick={stopJoyState}/>
             </Physics>
           </Suspense>

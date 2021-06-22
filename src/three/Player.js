@@ -12,7 +12,7 @@ import { Vector3, BoxHelper, Euler, Quaternion } from 'three';
 import ChicaT from './ChicaT'
 import { Joystick } from 'react-joystick-component';
 
-const SPEED = 6;
+const SPEED = 226;
 
 // const ChicaT = (rotationZ) => {
 //   const group = useRef()
@@ -46,8 +46,9 @@ export const Player = ({ moveJoystick, stopJoystick }) => {
   } = useKeyboardControls();
   // const [ref] = useBox(() => ({ mass: 1, position: [0, 5, 0], ...props }))
   const [ref, api] = useSphere(() => ({
-    mass: 0,
+    mass: 21,
     type: 'Dynamic',
+    position: [0, 35, 0]
     // ...props,
   }));
 
@@ -64,7 +65,7 @@ export const Player = ({ moveJoystick, stopJoystick }) => {
     // const {camera} = state
     // camera.position.copy(ref.current.position);
     const camaraVect = new Vector3(ref.current.position.x + 3, ref.current.position.y + 8, ref.current.position.z + 6)
-    camera.position.copy(camaraVect);
+    // camera.position.copy(camaraVect);
 
     const direction = new Vector3(
       !stopJoystick ? (moveJoystick.current.x / 50) : 0,
